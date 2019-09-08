@@ -1,0 +1,12 @@
+#idea ignore
+.idea
+
+*.swp
+
+#temp ignore
+*.log
+*.exe
+*.cache
+*.exe~
+*.patch
+*.tmp

@@ -1,0 +1,283 @@
+basePath: '{{.BasePath}}'
+definitions:
+  pet.PetResponse:
+    properties:
+      avatar:
+        type: string
+      cid:
+        description: category id [种类]
+        type: integer
+      id:
+        type: integer
+      nickname:
+        type: string
+      user_id:
+        description: 用户id
+        type: integer
+    type: object
+  sms.SmsSendResponse:
+    properties:
+      hint:
+        type: string
+      sms:
+        type: string
+    type: object
+  user.UserLoginResponse:
+    properties:
+      account:
+        type: string
+      ticket:
+        type: string
+      token:
+        type: string
+    type: object
+  user.UserResponse:
+    properties:
+      account:
+        type: string
+      id:
+        type: integer
+      nickname:
+        type: string
+      status:
+        type: integer
+    type: object
+host: 127.0.0.1:7869
+info:
+  contact:
+    name: API Support
+    url: https://s.a.iri9.cn
+  description: This is a pet project docs, service api provide.
+  license: {}
+  title: Go api services
+  version: '{{.Version}}'
+paths:
+  /common/sms/check:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: code 验证码
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: action 短信的动作
+        in: query
+        name: action
+        required: true
+        type: string
+      - description: account 手机号码
+        in: query
+        name: account
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: 校验验证码接口
+      tags:
+      - 公共接口
+  /common/sms/send:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: account 用户手机号码
+        in: query
+        name: account
+        required: true
+        type: string
+      - description: action 发送某种短信的动作
+        in: query
+        name: action
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sms.SmsSendResponse'
+            type: object
+      security:
+      - Bearer: []
+      summary: 发送短信验证码
+      tags:
+      - 公共接口
+  /pet/common/identification:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: upload 接口返回的 K
+        in: query
+        name: k
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pet.PetResponse'
+            type: object
+      security:
+      - Bearer: []
+      summary: 识别宠物
+      tags:
+      - 宠物接口
+  /pet/common/upload:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 图片
+        in: query
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pet.PetResponse'
+            type: object
+      security:
+      - Bearer: []
+      summary: 上传宠物图片
+      tags:
+      - 宠物接口
+  /pet/pet/edit:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 宠物名称
+        in: query
+        name: nickname
+        required: true
+        type: string
+      - description: 宠物头像
+        in: query
+        name: avatar
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pet.PetResponse'
+            type: object
+      security:
+      - Bearer: []
+      summary: 编辑宠物
+      tags:
+      - 宠物接口
+  /pet/pet/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: category id
+        in: query
+        name: cid
+        required: true
+        type: string
+      - description: 宠物名称
+        in: query
+        name: nickname
+        required: true
+        type: string
+      - description: 宠物头像
+        in: query
+        name: avatar
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pet.PetResponse'
+            type: object
+      security:
+      - Bearer: []
+      summary: 注册宠物
+      tags:
+      - 宠物接口
+  /user/auth/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: account 手机号码
+        in: query
+        name: account
+        required: true
+        type: string
+      - description: password 密码
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserLoginResponse'
+            type: object
+      security:
+      - Bearer: []
+      summary: 用户登录
+      tags:
+      - 用户接口
+  /user/auth/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: code 验证码
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: account 手机号码
+        in: query
+        name: account
+        required: true
+        type: string
+      - description: password 密码
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserResponse'
+            type: object
+      security:
+      - Bearer: []
+      summary: 用户注册
+      tags:
+      - 用户接口
+swagger: "2.0"
